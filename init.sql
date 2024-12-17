@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON bookmedik.* TO 'admin'@'%' IDENTIFIED BY 'admin';
+FLUSH PRIVILEGES;

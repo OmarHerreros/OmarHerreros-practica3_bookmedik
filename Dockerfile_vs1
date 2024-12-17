@@ -1,0 +1,32 @@
+FROM php:8.3.14-apache
+
+# Instalar módulos necesarios
+RUN apt-get update && apt-get install -y \
+    mariadb-client \
+    libzip-dev \
+    && docker-php-ext-install mysqli zip
+
+# Copiar el código de la aplicación
+COPY . /var/www/html/
+
+# Establecer permisos
+RUN chown -R www-data:www-data /var/www/html
+
+# Configuración del servidor
+ENV APACHE_DOCUMENT_ROOT=/var/www/html
+
+# Variables de conexión por defecto
+ENV DB_HOST=mariadb
+ENV DB_USER=admin
+ENV DB_PASS=admin
+ENV DB_NAME=bookmedik
+
+# Copiar script de inicialización
+COPY build/script.sh /usr/local/bin/script.sh
+RUN chmod +x /usr/local/bin/script.sh
+
+# Puerto expuesto
+EXPOSE 80
+
+# Comando por defecto
+CMD ["bash", "/usr/local/bin/script.sh"]

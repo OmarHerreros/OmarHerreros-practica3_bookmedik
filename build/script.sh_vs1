@@ -1,0 +1,9 @@
+#!/bin/bash
+while ! mysql -u $DB_USER -p$DB_PASS -h $DB_HOST -e "SHOW DATABASES;" > /dev/null 2>&1; do
+  echo "Esperando a que MariaDB esté disponible..."
+  sleep 2
+done
+
+mysql -u $DB_USER -p$DB_PASS -h $DB_HOST $DB_NAME < /var/www/html/schema.sql
+
+apache2-foreground
